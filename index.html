@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>标签云</title>
+	<style>
+	*{
+		margin: 0;
+		padding: 0;
+		position: relative;
+	}
+		.scene{
+			width: 100vw;
+			height: 100vh;
+			overflow: hidden;
+		}
+	</style>
+</head>
+<body>
+	<div class="scene"></div>
+</body>
+<script>
+	let arr=["html","css","javascript","vue","nodejs","php","mysql","bootstrap","express","antd"];
+
+	
+	function getcolor(){
+		let colorArr=["3","6","9","C"];
+		let str="#";
+		for(let i=0;i<3;i++){
+			
+			 str+=colorArr[Math.floor(Math.random()*colorArr.length)];
+		}
+		return str;
+		console.log(str);
+	}
+
+	function checked(l,t){
+		return pos.some(function(data){
+			if(l>data.l-100&&l<data.l+100&&t>data.t-100&&t<data.t+100){
+				return true;
+			}
+		});
+	}
+	let pos=[];
+	console.log(pos);
+
+	let docf=document.createDocumentFragment();
+	let divArr=arr.map(function(val){
+		let newdiv=document.createElement("div");
+		let randomleft,randomtop;
+
+	do{
+		 randomleft=Math.random()*(window.innerWidth-100);
+		 randomtop=Math.random()*(window.innerHeight-100);
+	}while(checked(randomleft,randomtop));
+	pos.push({l:randomleft,t:randomtop,speed:2+Math.random()*2});
+
+		newdiv.innerHTML=val;
+
+		newdiv.style.cssText=`width:100px;height:100px;background:${getcolor()};position:absolute;top:${randomtop}px;left:${randomleft}px;text-align:center;line-height:100px;border-radius:50%;font-size:18px;color:#111`;
+		docf.appendChild(newdiv);
+		return newdiv;
+	});
+	let scene=document.querySelector(".scene");
+	scene.appendChild(docf);
+
+	
+	setInterval(function(){
+		divArr.forEach(function(ele,index){
+	// 1
+		// pos[index].l+=5;
+		// if(pos[index].l>window.innerWidth){
+		// 	pos[index].l=-120;
+		// }
+		// ele.style.left=pos[index].l+"px";
+		
+	
+	// 2
+	// 	pos[index].l-=5;
+	// 	if(pos[index].l<-120){
+	// 		pos[index].l=window.innerWidth;
+	// 	}
+	// 	ele.style.left=pos[index].l+"px";
+		
+
+	// 3
+		// pos[index].l+=pos[index].speed;
+		// if(pos[index].l>window.innerWidth-120||pos[index].l<0)
+		// {
+		// 	pos[index].speed*=-1;		}
+		// ele.style.left=pos[index].l+"px";
+	
+
+	// 4
+		if(index<pos.length/2){
+			pos[index].l+=pos[index].speed;
+			if(pos[index].l>window.innerWidth-120||pos[index].l<0){
+				pos[index].speed*=-1;
+			}
+			ele.style.left = pos[index].l+"px";		
+		}
+		else{
+			pos[index].t+=pos[index].speed;
+			if(pos[index].t>window.innerHeight-70||pos[index].t<0){
+				pos[index].speed*=-1
+			}
+			ele.style.top=pos[index].t+"px";
+		}
+	})
+	}, 30)
+	
+</script>
+</html>
